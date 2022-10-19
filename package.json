@@ -2,7 +2,7 @@
   "name": "create-react-ssr-layout",
   "version": "0.0.1",
   "description": "A useful tool to quickly build a starting express server that uses custom SSR with a custom jsx render engine",
-  "exports": "./index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,8 +28,6 @@
   "devDependencies": {
     "eslint": "^8.25.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "inquirer": "^9.1.4"
-  },
-  "type": "module"
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
