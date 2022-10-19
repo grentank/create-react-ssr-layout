@@ -1,0 +1,35 @@
+{
+  "name": "create-react-ssr-layout",
+  "version": "0.0.1",
+  "description": "A useful tool to quickly build a starting express server that uses custom SSR with a custom jsx render engine",
+  "exports": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "create-react-ssr-layout": "bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grentank/create-react-ssr-layout.git"
+  },
+  "keywords": [
+    "React",
+    "SSR",
+    "render",
+    "express"
+  ],
+  "author": "Alexander Knyazev mexmat100394@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grentank/create-react-ssr-layout/issues"
+  },
+  "homepage": "https://github.com/grentank/create-react-ssr-layout#readme",
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "inquirer": "^9.1.4"
+  },
+  "type": "module"
+}
