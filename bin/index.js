@@ -5,11 +5,15 @@ const {
 
 (async function run() {
   try {
-    console.log('Creating desired dirs...');
-    await makeDirs();
-    console.log('All dirs have been created.\nGetting list of files...');
+    try {
+      console.log('Creating desired dirs...');
+      await makeDirs();
+      console.log('All dirs have been created.\nGetting list of files...');
+    } catch (dirEr) {
+      console.log('Failed to create the desired directories');
+    }
     const filesList = (await getFiles(__dirname))
-      .filter((filename) => !filename.includes('index.js') && !filename.includes('utils.js'));
+      .filter((filename) => (filename !== 'index.js') && !filename.includes('utils.js'));
     for (let i = 0; i < filesList.length; i += 1) {
       try {
         await createFile(filesList[i]);
@@ -21,7 +25,8 @@ const {
     try {
       console.log('Modifying package.json');
       await scriptToPackageJson();
-      console.log('You can install all dependencies with\n\t\tnpm run deps');
+      console.log('Finished!\n================================\n================================\n');
+      console.log('\nYou can install all dependencies with:\tnpm run deps');
     } catch (e) {
       console.log('Failed to modify package.json');
     }

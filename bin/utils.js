@@ -26,8 +26,10 @@ const makeDirs = async () => {
 const scriptToPackageJson = async () => {
   const packageJson = await fs.readFile('package.json', 'utf-8');
   const jsonData = JSON.parse(packageJson);
+  jsonData.scripts.dev = 'babel-node src/server.js';
+  jsonData.scripts.webpack = 'webpack -wd eval-source-map';
   jsonData.scripts.deps = 'npm i -D @babel/node @babel/plugin-proposal-class-properties @babel/preset-react @babel/preset-env babel-loader morgan webpack webpack-cli sequelize-cli'
-  + '&& npm i express react react-dom react-router-dom sequelize pg pg-hstore dotenv express-session session-file-store bcrypt axios';
+  + ' && npm i express react react-dom react-router-dom sequelize pg pg-hstore dotenv express-session session-file-store bcrypt axios';
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
