@@ -9,7 +9,7 @@ import apiRouter from './routes/apiRouter';
 
 require('dotenv').config();
 
-const PORT = process.env.SERVER_PORT || 3002;
+const PORT = process.env.SERVER_PORT || 3000;
 const app = express();
 const FileStore = store(session);
 

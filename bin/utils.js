@@ -19,7 +19,7 @@ const makeDirs = async () => {
       await fs.mkdir(dirs[i]);
       console.log(`+++ Created directory ${dirs[i]}`);
     } catch (e) {
-      console.log(`--- Failed to create directory ${dirs[i]}.`);
+      console.log(`--- Failed to create directory ${dirs[i]}`);
     }
   }
 };

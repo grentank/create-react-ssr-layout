@@ -10,7 +10,7 @@ const {
       await scriptToPackageJson();
     } catch (error) {
       console.log(error);
-      console.log(`\n${'#'.repeat(20)}`);
+      console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
       console.log('Error reading package.json. Use npm init first.\nThen execute npx create-react-ssr-layout again');
       return;
     }
@@ -18,11 +18,12 @@ const {
     await makeDirs();
     console.log('All dirs have been created.\n\nCreating files...');
     await makeFiles();
-    console.log(`Finished!\n${'#'.repeat(20)}\n${'#'.repeat(20)}\n`);
+    console.log(`Finished!\n\n${'#'.repeat(50)}\n${'#'.repeat(50)}\n`);
     console.table(instructions);
+    console.log('Happy hacking!');
   } catch (e) {
     console.log(e);
-    console.log(`\n${'#'.repeat(20)}`);
+    console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
     console.log('Failed to execute.');
   }
 }());
