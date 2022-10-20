@@ -1,20 +1,31 @@
 #! /usr/bin/env node
-const { exec } = require('child_process');
-const fs = require('fs/promises');
-const path = require('path');
-const { data } = require('./files/random');
+const {
+  makeDirs, getFiles, createFile, scriptToPackageJson,
+} = require('./utils');
 
-const createFile = async (filename) => fs.writeFile(filename, await fs.readFile(path.resolve(__dirname, './files/.babelrc'), 'utf8'));
-
-exec('ls -la', (error, stdout, stderr) => {
-  if (error) {
-    console.log(`error: ${error.message}`);
-    return;
+(async function run() {
+  try {
+    console.log('Creating desired dirs...');
+    await makeDirs();
+    console.log('All dirs have been created.\nGetting list of files...');
+    const filesList = (await getFiles(__dirname))
+      .filter((filename) => !filename.includes('index.js') && !filename.includes('utils.js'));
+    for (let i = 0; i < filesList.length; i += 1) {
+      try {
+        await createFile(filesList[i]);
+        console.log(`Created file ${filesList[i]}`);
+      } catch (error) {
+        console.log(`Failed to create file ${filesList[i]}`);
+      }
+    }
+    try {
+      console.log('Modifying package.json');
+      await scriptToPackageJson();
+      console.log('You can install all dependencies with\n\t\tnpm run deps');
+    } catch (e) {
+      console.log('Failed to modify package.json');
+    }
+  } catch (e) {
+    console.log('Failed to execute');
   }
-  if (stderr) {
-    console.log(`stderr: ${stderr}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}\n${data}`);
-  createFile('.babelrc');
-});
+}());

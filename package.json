@@ -4,7 +4,7 @@
   "description": "A useful tool to quickly build a starting express server that uses custom SSR with a custom jsx render engine",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "bin": {
     "create-react-ssr-layout": "bin/index.js"
@@ -27,7 +27,11 @@
   "homepage": "https://github.com/grentank/create-react-ssr-layout#readme",
   "devDependencies": {
     "eslint": "^8.25.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
