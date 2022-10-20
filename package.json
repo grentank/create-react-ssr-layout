@@ -1,6 +1,6 @@
 {
   "name": "create-react-ssr-layout",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A useful tool to quickly build a starting express server that uses custom SSR with a custom jsx render engine",
   "main": "index.js",
   "scripts": {
