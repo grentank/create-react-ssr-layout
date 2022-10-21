@@ -19,14 +19,17 @@ Simply run this command in your terminal
 npx create-react-ssr-layout
 ```
 
-It will create all essential files and directories to launch a server. However this package will not install dependencies. You can either configure them by your own or use `npm run deps` to install all at once.
+It will create all essential files and directories to launch a server. By default dependencies will not be installed. Run `npm run deps` or add a flag  `-i` or `--install` to install all dependencies automatically.
+
+If you don't want to install all of the provided dependencies you can configure them by yourself. Check the `npm run deps` script in `package.json` to extract the required packages.
+
 
 ## Quick start
 
-After executing the `npx create-react-ssr-layout` install all dependencies with
+Execute this package with `-i` to create required files and install all dependencies
 
 ```
-npm run deps
+npx create-react-ssr-layout -i
 ```
 
 To launch the server use
@@ -56,11 +59,11 @@ Performs migrations and seeds a database. Then executes webpack and launches the
 
 ### npm run dev
 
-Only starts the server
+Only starts the server.
 
 ### npm run webpack
 
-Starts webpack with -wd flags
+Starts webpack with in watch mode.
 
 ## Used packages
 

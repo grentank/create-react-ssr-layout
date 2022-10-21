@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
+// const { exec } = require('child_process');
 
 const createFile = async (filename) => fs.writeFile(filename, await fs.readFile(path.resolve(__dirname, `./${filename}`), 'utf8'));
 
@@ -75,18 +76,29 @@ const instructions = [
   },
 ];
 
-const asyncExec = (str) => new Promise((res, rej) => {
-  exec(str, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      rej(error);
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      rej(stderr);
-    }
-    res(stdout);
-  });
+// const asyncExec = (str) => new Promise((res, rej) => {
+//   exec(str, (error, stdout, stderr) => {
+//     if (error) {
+//       console.log(`error: ${error.message}`);
+//       rej(error);
+//     }
+//     if (stderr) {
+//       console.log(`stderr: ${stderr}`);
+//       rej(stderr);
+//     }
+//     res(stdout);
+//   });
+// });
+
+const asyncSpawn = (cmd, opts) => new Promise((res, rej) => {
+  const cmdProcess = spawn(cmd, opts);
+  cmdProcess.stdout.on('data', (data) => console.log(data));
+
+  cmdProcess.stderr.on('data', (data) => console.log(`ERROR: ${data}`));
+
+  cmdProcess.on('error', (error) => rej(error));
+
+  cmdProcess.on('close', (code) => res(code));
 });
 
 const flagParser = () => {
@@ -94,10 +106,10 @@ const flagParser = () => {
   switch (flag) {
     case '-i':
       console.log('Installing dependencies...');
-      return asyncExec(deps);
+      return asyncSpawn('npm', ['run', 'deps']);
     case '--install':
       console.log('Installing dependencies...');
-      return asyncExec(deps);
+      return asyncSpawn('npm', ['run', 'deps']);
     // case '-q':
     //   console.log('Initiating quick start');
     //   return asyncExec(deps).then(() => asyncExec('npm start'));
@@ -105,6 +117,7 @@ const flagParser = () => {
     //   console.log('Initiating quick start');
     //   return asyncExec(deps).then(() => asyncExec('npm start'));
     default:
+      console.log(`Flag ${flag} could not be recognized!`);
       return Promise.resolve();
   }
 };
