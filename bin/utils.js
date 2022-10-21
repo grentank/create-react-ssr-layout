@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const { exec } = require('child_process');
 
 const createFile = async (filename) => fs.writeFile(filename, await fs.readFile(path.resolve(__dirname, `./${filename}`), 'utf8'));
 
@@ -37,15 +38,17 @@ const makeFiles = async () => {
   }
 };
 
+const deps = 'npm i -D @babel/node @babel/plugin-proposal-class-properties @babel/preset-react @babel/preset-env babel-loader morgan webpack webpack-cli sequelize-cli'
++ ' && npm i express react react-dom react-router-dom sequelize pg pg-hstore dotenv express-session session-file-store bcrypt axios';
+
 const scriptToPackageJson = async () => {
   const packageJson = await fs.readFile('package.json', 'utf-8');
   const jsonData = JSON.parse(packageJson);
   jsonData.scripts.dev = 'babel-node src/server.js';
   jsonData.scripts.webpack = 'webpack -wd eval-source-map';
-  jsonData.scripts.start = 'webpack && babel-node src/server.js';
+  jsonData.scripts.start = 'webpack -d eval-source-map && babel-node src/server.js';
   jsonData.scripts.launch = 'npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && webpack && babel-node src/server.js';
-  jsonData.scripts.deps = 'npm i -D @babel/node @babel/plugin-proposal-class-properties @babel/preset-react @babel/preset-env babel-loader morgan webpack webpack-cli sequelize-cli'
-  + ' && npm i express react react-dom react-router-dom sequelize pg pg-hstore dotenv express-session session-file-store bcrypt axios';
+  jsonData.scripts.deps = deps;
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
@@ -56,7 +59,7 @@ const instructions = [
   },
   {
     command: 'npm start',
-    description: 'Quick start of the project',
+    description: 'Bundle and start the server',
   },
   {
     command: 'npm run launch',
@@ -72,6 +75,40 @@ const instructions = [
   },
 ];
 
+const asyncExec = (str) => new Promise((res, rej) => {
+  exec(str, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      rej(error);
+    }
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      rej(stderr);
+    }
+    res(stdout);
+  });
+});
+
+const flagParser = () => {
+  const flag = process.argv[2];
+  switch (flag) {
+    case '-i':
+      console.log('Installing dependencies...');
+      return asyncExec(deps);
+    case '--install':
+      console.log('Installing dependencies...');
+      return asyncExec(deps);
+    // case '-q':
+    //   console.log('Initiating quick start');
+    //   return asyncExec(deps).then(() => asyncExec('npm start'));
+    // case '--quickstart':
+    //   console.log('Initiating quick start');
+    //   return asyncExec(deps).then(() => asyncExec('npm start'));
+    default:
+      return Promise.resolve();
+  }
+};
+
 module.exports = {
-  createFile, getFiles, makeDirs, scriptToPackageJson, makeFiles, instructions,
+  createFile, getFiles, makeDirs, scriptToPackageJson, makeFiles, instructions, flagParser,
 };

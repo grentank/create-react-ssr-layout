@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const {
-  makeDirs, scriptToPackageJson, makeFiles, instructions,
+  makeDirs, scriptToPackageJson, makeFiles, instructions, flagParser,
 } = require('./utils');
 
 (async function run() {
@@ -18,6 +18,14 @@ const {
     await makeDirs();
     console.log('All dirs have been created.\n\nCreating files...');
     await makeFiles();
+    console.log('All files have been created\n');
+    if (process.argv[2]) {
+      try {
+        await flagParser();
+      } catch (installError) {
+        console.log('\nFailed to install dependencies. Try to do it manually or run: npm run deps\n');
+      }
+    }
     console.log(`Finished!\n\n${'#'.repeat(50)}\n${'#'.repeat(50)}\n`);
     console.table(instructions);
     console.log('Happy hacking!');

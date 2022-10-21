@@ -48,7 +48,7 @@ Installs all dependencies at once. To be specific it installs the following
 
 ### npm start
 
-Executes webpack to create bundles and then launches the server on specified port via babel-node.
+Executes webpack to create bundles and then launches the server on a specified port via babel-node.
 
 ### npm run launch
 
