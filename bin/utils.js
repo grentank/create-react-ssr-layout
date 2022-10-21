@@ -92,7 +92,7 @@ const instructions = [
 
 const asyncSpawn = (cmd, opts) => new Promise((res, rej) => {
   const cmdProcess = spawn(cmd, opts);
-  cmdProcess.stdout.on('data', (data) => console.log(data));
+  cmdProcess.stdout.on('data', (data) => console.log(`${data}`));
 
   cmdProcess.stderr.on('data', (data) => console.log(`ERROR: ${data}`));
 
