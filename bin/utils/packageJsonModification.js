@@ -24,7 +24,7 @@ const devDependenciesMap = {
   bcrypt: '',
 };
 
-const scriptToPackageJson = async (options) => {
+const scriptsToPackageJson = async (options) => {
   const packageJson = await fs.readFile('package.json', 'utf-8');
   const jsonData = JSON.parse(packageJson);
   const devDependencies = ['npm', 'i', '-D', '@babel/node', '@babel/preset-react', '@babel/preset-env'];
@@ -51,4 +51,4 @@ const scriptToPackageJson = async (options) => {
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
-module.exports = scriptToPackageJson;
+module.exports = scriptsToPackageJson;
