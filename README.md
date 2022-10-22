@@ -1,6 +1,6 @@
 # create-react-ssr-layout
 
-A useful tool to quickly build a basic express server that uses a custom-build SSR engine.
+A useful tool to quickly build a basic express server that uses a custom-built SSR engine.
 
 ## Installation
 
