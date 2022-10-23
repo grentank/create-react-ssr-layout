@@ -53,29 +53,6 @@ const scriptToPackageJson = async () => {
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
-const instructions = [
-  {
-    command: 'npm run deps',
-    description: 'Install all dependencies',
-  },
-  {
-    command: 'npm start',
-    description: 'Bundle and start the server',
-  },
-  {
-    command: 'npm run launch',
-    description: 'Migrate + Seed + Quick start',
-  },
-  {
-    command: 'npm run dev',
-    description: 'Start the server',
-  },
-  {
-    command: 'npm run webpack',
-    description: 'Start webpack',
-  },
-];
-
 // const asyncExec = (str) => new Promise((res, rej) => {
 //   exec(str, (error, stdout, stderr) => {
 //     if (error) {
@@ -123,5 +100,5 @@ const flagParser = () => {
 };
 
 module.exports = {
-  createFile, getFiles, makeDirs, scriptToPackageJson, makeFiles, instructions, flagParser,
+  createFile, getFiles, makeDirs, scriptToPackageJson, makeFiles, flagParser,
 };

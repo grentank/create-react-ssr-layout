@@ -60,8 +60,63 @@ const applyOptions = async (options) => {
   // **********************************************************************
   //  APPLYING OPTIONS TO server.js
 
-  if (!options.includes('morgan')) {
+  try {
+    let serverFile = await fs.readFile('src/server.js', 'utf-8');
 
+    if (!options.includes('morgan')) {
+      serverFile = serverFile
+        .replace("import morgan from 'morgan';\n", '')
+        .replace("app.use(morgan('dev'));\n", '');
+    }
+
+    if (!options.includes('json')) {
+      serverFile = serverFile
+        .replace('app.use(express.urlencoded({ extended: true }));\n'
+        + 'app.use(express.json());\n', '');
+    }
+
+    if (!options.includes('webpack')) {
+      serverFile = serverFile
+        .replace("app.use(express.static('public'));\n", '');
+    }
+
+    if (!options.includes('routing')) {
+      serverFile = serverFile
+        .replace('app.use((req, res, next) => {\n'
+          + '  res.locals.path = req.originalUrl;\n'
+          + '  next();\n'
+          + '});\n', '');
+    }
+
+    if (!options.includes('session')) {
+      serverFile = serverFile
+        .replace("import session from 'express-session';\n"
+        + "import store from 'session-file-store';", '')
+        .replace('const FileStore = store(session);\n', '')
+        .replace('const sessionConfig = {\n'
+          + "  name: 'user_sid',\n"
+          + "  secret: process.env.SESSION_SECRET ?? 'test',\n"
+          + '  resave: true,\n'
+          + '  store: new FileStore(),\n'
+          + '  saveUninitialized: false,\n'
+          + '  cookie: {\n'
+          + '    maxAge: 1000 * 60 * 60 * 12,\n'
+          + '    httpOnly: true,\n'
+          + '  },\n'
+          + '};\n', '')
+        .replace('app.use(session(sessionConfig));\n', '');
+    }
+
+    if (!options.includes('dotenv')) {
+      serverFile = serverFile
+        .replace('process.env.SERVER_PORT || ', '')
+        .replace('process.env.SESSION_SECRET ?? ', '')
+        .replace("\nrequire('dotenv').config();\n", '');
+    }
+
+    await fs.writeFile('src/server.js', serverFile, 'utf-8');
+  } catch (error) {
+    console.log('Something went wrong with the server', error);
   }
 
   // **********************************************************************

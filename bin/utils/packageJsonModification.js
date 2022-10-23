@@ -55,4 +55,27 @@ function checkPckg() {
   return fs.readFile('package.json', 'utf-8');
 }
 
-module.exports = { scriptsToPackageJson, checkPckg };
+const instructions = [
+  {
+    command: 'npm run deps',
+    description: 'Install all dependencies',
+  },
+  {
+    command: 'npm start',
+    description: 'Bundle and start the server',
+  },
+  {
+    command: 'npm run launch',
+    description: 'Migrate + Seed + Quick start',
+  },
+  {
+    command: 'npm run dev',
+    description: 'Start the server',
+  },
+  {
+    command: 'npm run webpack',
+    description: 'Start webpack',
+  },
+];
+
+module.exports = { scriptsToPackageJson, checkPckg, instructions };
