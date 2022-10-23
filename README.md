@@ -1,15 +1,6 @@
 # create-react-ssr-layout
 
-A useful tool to quickly build a basic express server that uses a custom-built SSR engine.
-
-## Installation
-
-There is no need to install this package. Its purpose is to be executable-only. However if you do want it to be installed use
-
-```
-npm install -D create-react-ssr-layout
-```
-
+A useful npx tool to quickly build a basic express server that uses a custom-built SSR engine.
 
 ## Usage
 
@@ -19,20 +10,17 @@ Simply run this command in your terminal
 npx create-react-ssr-layout
 ```
 
-It will create all essential files and directories to launch a server. By default dependencies will not be installed. Run `npm run deps` or add a flag  `-i` or `--install` to install all dependencies automatically.
-
-If you don't want to install all of the provided dependencies you can configure them by yourself. Check the `npm run deps` script in `package.json` to extract the required packages.
-
+Answer questions via cli and pick a server build. You may use a predefined one or customize the build on your own. All required dependencies will be installed automatically.
 
 ## Quick start
 
-Execute this package with `-i` to create required files and install all dependencies
+Execute this package
 
 ```
-npx create-react-ssr-layout -i
+npx create-react-ssr-layout
 ```
 
-To launch the server use
+Answer some questions and wait until all files are created and all dependencies are installed. To launch the server use
 
 ```
 npm start
@@ -42,16 +30,24 @@ The server starts on port 3000 by default. Go to `http://localhost:3000/` to ope
 
 ## Scripts
 
+### npm start
+
+Executes webpack to create bundles and then launches the server on a specified port via babel-node.
+
 ### npm run deps
 
-Installs all dependencies at once. To be specific it installs the following
+Installs all chosen dependencies at once. Picking "Maximum server" option will install the following
 
 - dependencies: express, react, react-dom, react-router-dom, sequelize, pg, pg-hstore, dotenv, express-session, session-file-store, bcrypt, axios
 - devDependencies: @babel/node, @babel/plugin-proposal-class-properties, @babel/preset-react, @babel/preset-env, babel-loader, morgan, webpack, webpack-cli, sequelize-cli
 
-### npm start
 
-Executes webpack to create bundles and then launches the server on a specified port via babel-node.
+The option "Minimum server" will install the following
+
+- dependencies: express, react, react-dom
+- devDependencies: @babel/node, @babel/preset-react, @babel/preset-env
+
+Each custom option picked adds required dependencies and/or devDependencies.
 
 ### npm run launch
 
@@ -63,7 +59,26 @@ Only starts the server.
 
 ### npm run webpack
 
-Starts webpack with in watch mode.
+Starts webpack in watch mode.
+
+## Project tree
+
+.
+├── .babelrc
+├── .env
+├── .sequelizerc
+├── webpack.config.js
+└── src
+    ├── components
+    │   ├── App.jsx
+    │   ├── index.jsx
+    │   └── Layout.jsx
+    ├── routes
+    │   ├── apiRouter.js
+    │   └── indexRouter.js
+    ├── server.js
+    └── utils
+        └── jsxRender.js
 
 ## Used packages
 
@@ -100,4 +115,8 @@ The server uses custom jsx render engine that constructs a markup on the server 
 
 Two routers are added for convenience. `indexRouter` uses `res.render` method for rendering markups. `res.render` requires a string `Layout` to be passed as its first argument. The second argument may be ommited. Use it to pass props to `App.jsx`.
 
-`Layout.jsx` has basic HTML markdown. It uploads webpack scripts `app.js` and `vendor.js` and uses `dangerouslySetInnerHTML` to pass `initState` to client side for the hydration process.
+`Layout.jsx` has basic HTML markdown. It uploads webpack scripts `app.js` and `vendor.js` and uses `dangerouslySetInnerHTML` to pass `initState` to client side for the hydration process (if an option `webpack` with hydration was picked).
+
+## Issues
+
+Please, report about any found problems in project's github issues.

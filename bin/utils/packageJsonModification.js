@@ -57,12 +57,12 @@ function checkPckg() {
 
 const instructions = [
   {
-    command: 'npm run deps',
-    description: 'Install all dependencies',
+    command: 'npm start',
+    description: 'Configure bundles and start the server',
   },
   {
-    command: 'npm start',
-    description: 'Bundle and start the server',
+    command: 'npm run deps',
+    description: 'Install all dependencies',
   },
   {
     command: 'npm run launch',
@@ -74,7 +74,7 @@ const instructions = [
   },
   {
     command: 'npm run webpack',
-    description: 'Start webpack',
+    description: 'Start webpack in watch mode',
   },
 ];
 

@@ -1,4 +1,3 @@
-// const fs = require('fs').promises;
 const { spawn } = require('child_process');
 
 const asyncSpawn = (cmd, opts) => new Promise((res, rej) => {
@@ -13,14 +12,3 @@ const asyncSpawn = (cmd, opts) => new Promise((res, rej) => {
 });
 
 module.exports = asyncSpawn;
-
-// (async function run() {
-//   try {
-//     await asyncSpawn('npm', ['i', 'inquirer']);
-//     const { default: choices } = await import('./app.mjs');
-//     await choices();
-//     await asyncSpawn('npm', ['uninstall', 'inquirer']);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }());
