@@ -27,7 +27,7 @@ const asyncSpawn = require('./utils/promisified');
     console.log('\nCreating directories...');
     await makeDirs();
     console.log('All dirs have been created.\n\nCreating files...');
-    await makeFiles();
+    await makeFiles(options);
     console.log('All files have been created\n');
 
     await applyOptions(options);
