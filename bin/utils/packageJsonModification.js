@@ -51,4 +51,8 @@ const scriptsToPackageJson = async (options) => {
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
-module.exports = scriptsToPackageJson;
+function checkPckg() {
+  return fs.readFile('package.json', 'utf-8');
+}
+
+module.exports = { scriptsToPackageJson, checkPckg };

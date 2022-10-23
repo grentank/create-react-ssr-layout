@@ -35,7 +35,7 @@ const choices = [
     value: 'dotenv',
   },
   {
-    name: 'Sequelize',
+    name: 'Sequelize (only .sequelizerc and install dependencies)',
     value: 'sequelize',
   },
   {
@@ -43,11 +43,11 @@ const choices = [
     value: 'session',
   },
   {
-    name: 'Axios',
+    name: 'Axios (only install dependencies)',
     value: 'axios',
   },
   {
-    name: 'Bcrypt',
+    name: 'Bcrypt (only install dependencies)',
     value: 'bcrypt',
   },
 ];
