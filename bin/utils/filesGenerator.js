@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const createFile = async (filename) => fs.writeFile(filename, await fs.readFile(path.resolve(__dirname, `./resources/${filename}`), 'utf8'));
+const createFile = async (filename) => fs.writeFile(`./${filename}`, await fs.readFile(path.resolve(__dirname, `./resources/${filename}`), 'utf8'));
 
 const getFiles = async (dir) => {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
