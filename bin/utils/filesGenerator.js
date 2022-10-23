@@ -43,6 +43,7 @@ const isRequired = (filename) => filename.includes('App.jsx')
 const makeFiles = async (options) => {
   const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
     .filter((filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]));
+  console.log(filesList);
   for (let i = 0; i < filesList.length; i += 1) {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -50,6 +51,7 @@ const makeFiles = async (options) => {
       console.log(`+++ Created file ${filesList[i]}`);
     } catch (error) {
       console.log(`--- Failed to create file ${filesList[i]}`);
+      console.log(error);
     }
   }
 };
