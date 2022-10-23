@@ -63,6 +63,7 @@ Starts webpack in watch mode.
 
 ## Project tree
 
+```bash
 .
 ├── .babelrc
 ├── .env
@@ -79,6 +80,7 @@ Starts webpack in watch mode.
     ├── server.js
     └── utils
         └── jsxRender.js
+```
 
 ## Used packages
 
