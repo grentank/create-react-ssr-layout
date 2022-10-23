@@ -29,10 +29,10 @@ const filesToOptionsMap = {
   'webpack.config.js': 'webpack',
   '.sequelizerc': 'sequelize',
   '.env': 'dotenv',
+  'src/components/index.jsx': 'webpack',
 };
 
 const isRequired = (filename) => filename.includes('App.jsx')
-    || filename.includes('index.jsx')
     || filename.includes('Layout.jsx')
     || filename.includes('indexRouter.js')
     || filename.includes('apiRouter.js')
@@ -43,7 +43,7 @@ const isRequired = (filename) => filename.includes('App.jsx')
 const makeFiles = async (options) => {
   const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
     .filter((filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]));
-  console.log(filesList);
+  // console.log(filesList);
   for (let i = 0; i < filesList.length; i += 1) {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -84,7 +84,7 @@ const applyOptions = async (options) => {
 
     if (!options.includes('routing')) {
       serverFile = serverFile
-        .replace('app.use((req, res, next) => {\n'
+        .replace('\n\napp.use((req, res, next) => {\n'
           + '  res.locals.path = req.originalUrl;\n'
           + '  next();\n'
           + '});\n', '');
@@ -93,9 +93,9 @@ const applyOptions = async (options) => {
     if (!options.includes('session')) {
       serverFile = serverFile
         .replace("import session from 'express-session';\n"
-        + "import store from 'session-file-store';", '')
+        + "import store from 'session-file-store';\n", '')
         .replace('const FileStore = store(session);\n', '')
-        .replace('const sessionConfig = {\n'
+        .replace('\nconst sessionConfig = {\n'
           + "  name: 'user_sid',\n"
           + "  secret: process.env.SESSION_SECRET ?? 'test',\n"
           + '  resave: true,\n'
@@ -131,7 +131,7 @@ const applyOptions = async (options) => {
         '          <StaticRouter location={initState.path}>\n'
       + '            <App {...initState} />\n'
       + '          </StaticRouter>',
-        '          <App {...initState} />\n',
+        '          <App {...initState} />',
       )
       .replace("import { StaticRouter } from 'react-router-dom/server';\n", '');
     await fs.writeFile('src/components/Layout.jsx', newLayout, 'utf-8');
@@ -158,7 +158,7 @@ const applyOptions = async (options) => {
 
   if (!options.includes('webpack')) {
     const newBabelrc = (await fs.readFile('.babelrc', 'utf-8'))
-      .replace('"plugins": ["@babel/plugin-proposal-class-properties"]\n', '');
+      .replace(',\n    "plugins": ["@babel/plugin-proposal-class-properties"]', '');
     await fs.writeFile('.babelrc', newBabelrc, 'utf-8');
   }
 

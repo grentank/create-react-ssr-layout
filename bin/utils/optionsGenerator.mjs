@@ -82,7 +82,7 @@ async function getChoices() {
       return choices.map((choice) => choice.value);
     case 'custom':
       console.log('You have picked to customize a server');
-      return getOptions();
+      return (await getOptions()).options;
     default:
       console.log('Uknown option');
       return [];
