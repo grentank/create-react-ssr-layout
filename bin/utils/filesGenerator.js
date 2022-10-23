@@ -9,7 +9,7 @@ const getFiles = async (dir) => {
     const res = path.resolve(dir, dirent.name);
     return dirent.isDirectory() ? getFiles(res) : res;
   }));
-  return files.flat().map((pathname) => pathname.replace(`${__dirname}/resources/`, ''));
+  return files.flat().map((pathname) => pathname.replace(path.resolve(__dirname, '../resources/'), ''));
 };
 
 const makeDirs = async () => {
