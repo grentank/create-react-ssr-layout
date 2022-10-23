@@ -41,7 +41,7 @@ const isRequired = (filename) => filename.includes('App.jsx')
     || filename.includes('.babelrc');
 
 const makeFiles = async (options) => {
-  const filesList = (await getFiles(path.resolve(__dirname, './resources')))
+  const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
     .filter((filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]));
   for (let i = 0; i < filesList.length; i += 1) {
     try {
