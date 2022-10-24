@@ -2,6 +2,9 @@
 
 A useful npx tool to quickly build a basic express server that uses a custom-built SSR engine.
 
+[Check out this package on npm](https://www.npmjs.com/package/create-react-ssr-layout "NPM create-react-ssr-layout")
+[And on GitHub](https://github.com/grentank/create-react-ssr-layout "GitHub")
+
 ## Usage
 
 Simply run this command in your terminal
@@ -26,7 +29,7 @@ Answer some questions and wait until all files are created and all dependencies 
 npm start
 ```
 
-The server starts on port 3000 by default. Go to `http://localhost:3000/` to open the page.
+The server starts on port 3000 by default. Go to [`http://localhost:3000/`](http://localhost:3000/) to open the page.
 
 ## Scripts
 
