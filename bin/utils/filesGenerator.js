@@ -32,13 +32,15 @@ const filesToOptionsMap = {
   'src/components/index.jsx': 'webpack',
 };
 
+// rewrite this garbage =)
 const isRequired = (filename) => filename.includes('App.jsx')
     || filename.includes('Layout.jsx')
     || filename.includes('indexRouter.js')
     || filename.includes('apiRouter.js')
     || filename.includes('jsxRender.js')
     || filename.includes('server.js')
-    || filename.includes('.babelrc');
+    || filename.includes('.babelrc')
+    || filename.includes('.gitignore');
 
 const makeFiles = async (options) => {
   const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
