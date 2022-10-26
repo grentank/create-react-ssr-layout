@@ -4,6 +4,8 @@ public/vendor.js
 sessions/
 session/
 
+.env
+
 # Logs
 logs
 *.log

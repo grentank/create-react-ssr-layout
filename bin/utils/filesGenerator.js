@@ -40,7 +40,7 @@ const isRequired = (filename) => filename.includes('App.jsx')
     || filename.includes('jsxRender.js')
     || filename.includes('server.js')
     || filename.includes('.babelrc')
-    || filename.includes('.gitignore');
+    || filename.includes('gitignore.txt');
 
 const makeFiles = async (options) => {
   const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
@@ -55,6 +55,7 @@ const makeFiles = async (options) => {
       console.log(error);
     }
   }
+  await fs.rename('gitignore.txt', '.gitignore');
 };
 
 const applyOptions = async (options) => {
