@@ -71,6 +71,7 @@ Starts webpack in watch mode.
 .
 ├── .babelrc
 ├── .env
+├── .gitignore
 ├── .sequelizerc
 ├── webpack.config.js
 └── src
