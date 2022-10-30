@@ -14,12 +14,8 @@ const asyncSpawn = require('./utils/promisified');
       console.log('Error reading package.json. Use npm init first.\nThen execute npx create-react-ssr-layout again');
       return;
     }
-    // console.log('Installing temporary dependencies...');
-    // await asyncSpawn('npm', ['i', 'inquirer']);
     const { default: getChoices } = await import('./utils/optionsGenerator.mjs');
     const options = await getChoices();
-    // console.log('Uninstalling temporary dependencies...');
-    // await asyncSpawn('npm', ['uninstall', 'inquirer']);
 
     console.log('\nCreating directories...');
     await makeDirs();
