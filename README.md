@@ -126,4 +126,4 @@ Two routers are added for convenience. `indexRouter` uses `res.render` method fo
 
 ## Issues
 
-Please, report about any found problems in project's github issues.
+Use GitHub issues to report about any problems or bugs
