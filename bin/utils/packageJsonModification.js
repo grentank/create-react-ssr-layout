@@ -10,6 +10,8 @@ const dependenciesMap = {
   session: 'express-session session-file-store',
   axios: 'axios',
   bcrypt: 'bcrypt',
+  eslint: '',
+  prettier: '',
 };
 
 const devDependenciesMap = {
@@ -22,12 +24,22 @@ const devDependenciesMap = {
   session: '',
   axios: '',
   bcrypt: '',
+  eslint:
+    'eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks',
+  prettier: 'prettier eslint-config-prettier',
 };
 
 const scriptsToPackageJson = async (options) => {
   const packageJson = await fs.readFile('package.json', 'utf-8');
   const jsonData = JSON.parse(packageJson);
-  const devDependencies = ['npm', 'i', '-D', '@babel/node', '@babel/preset-react', '@babel/preset-env'];
+  const devDependencies = [
+    'npm',
+    'i',
+    '-D',
+    '@babel/node',
+    '@babel/preset-react',
+    '@babel/preset-env',
+  ];
   const dependencies = ['npm', 'i', 'express', 'react', 'react-dom'];
   jsonData.scripts.dev = 'babel-node src/server.js';
   jsonData.scripts.start = 'babel-node src/server.js';
@@ -43,15 +55,20 @@ const scriptsToPackageJson = async (options) => {
     }
 
     if (option === 'sequelize') {
-      jsonData.scripts.launch = `npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && ${jsonData.scripts.start}`;
+      jsonData.scripts[
+        'prep-db'
+      ] = `npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all`;
+      jsonData.scripts.launch = `npm run prep-db && ${jsonData.scripts.start}`;
     }
   });
 
-  jsonData.scripts.deps = [...devDependencies, '&&', ...dependencies].filter((dep) => dep !== '').join(' ');
+  jsonData.scripts.deps = [...devDependencies, '&&', ...dependencies]
+    .filter((dep) => dep !== '')
+    .join(' ');
   await fs.writeFile('package.json', JSON.stringify(jsonData, null, '  '), 'utf-8');
 };
 
-function checkPckg() {
+function checkPackageJson() {
   return fs.readFile('package.json', 'utf-8');
 }
 
@@ -78,4 +95,4 @@ const instructions = [
   },
 ];
 
-module.exports = { scriptsToPackageJson, checkPckg, instructions };
+module.exports = { scriptsToPackageJson, checkPackageJson, instructions };

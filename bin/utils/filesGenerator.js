@@ -1,27 +1,35 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const createFile = async (filename) => fs.writeFile(filename, await fs.readFile(path.resolve(__dirname, `../resources/${filename}`), 'utf8'));
+const createFile = async (filename) =>
+  fs.writeFile(
+    filename,
+    await fs.readFile(path.resolve(__dirname, `../resources/${filename}`), 'utf8'),
+    'utf8',
+  );
 
 const getFiles = async (dir) => {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
-  const files = await Promise.all(dirents.map((dirent) => {
-    const res = path.resolve(dir, dirent.name);
-    return dirent.isDirectory() ? getFiles(res) : res;
-  }));
-  return files.flat().map((pathname) => pathname.replace(`${path.resolve(__dirname, '../resources')}/`, ''));
+  const files = await Promise.all(
+    dirents.map((dirent) => {
+      const res = path.resolve(dir, dirent.name);
+      return dirent.isDirectory() ? getFiles(res) : res;
+    }),
+  );
+  return files
+    .flat()
+    .map((pathname) => pathname.replace(`${path.resolve(__dirname, '../resources')}/`, ''));
 };
 
 const makeDirs = async () => {
-  const dirs = ['src', 'src/components', 'src/routes', 'src/utils'];
-  for (let i = 0; i < dirs.length; i += 1) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      await fs.mkdir(dirs[i]);
-      console.log(`+++ Created directory ${dirs[i]}`);
-    } catch (e) {
-      console.log(`--- Failed to create directory ${dirs[i]}`);
-    }
+  const dirs = ['src/components', 'src/routes', 'src/utils'];
+  try {
+    await fs.mkdir('src');
+    console.log(`+++ Created directory src`);
+    await Promise.all(dirs.map((dir) => fs.mkdir(dir)));
+    console.log(`+++ Created directories ${dirs.join(', ')}`);
+  } catch (e) {
+    console.log(`--- Failed to create directories ${dirs.join(', ')}`);
   }
 };
 
@@ -30,21 +38,39 @@ const filesToOptionsMap = {
   '.sequelizerc': 'sequelize',
   '.env': 'dotenv',
   'src/components/index.jsx': 'webpack',
+  'eslintrc.txt': 'eslint',
+  'prettierrc.txt': 'prettier',
 };
 
+const requiredFiles = [
+  'App.jsx',
+  'Layout.jsx',
+  'indexRouter.js',
+  'apiRouter.js',
+  'jsxRender.js',
+  'server.js',
+  '.babelrc',
+  'gitignore.txt',
+];
+
+const isRequired = (filename) =>
+  requiredFiles.some((requiredFile) => filename.includes(requiredFile));
+
 // rewrite this garbage =)
-const isRequired = (filename) => filename.includes('App.jsx')
-    || filename.includes('Layout.jsx')
-    || filename.includes('indexRouter.js')
-    || filename.includes('apiRouter.js')
-    || filename.includes('jsxRender.js')
-    || filename.includes('server.js')
-    || filename.includes('.babelrc')
-    || filename.includes('gitignore.txt');
+// const isRequired = (filename) =>
+//   filename.includes("App.jsx") ||
+//   filename.includes("Layout.jsx") ||
+//   filename.includes("indexRouter.js") ||
+//   filename.includes("apiRouter.js") ||
+//   filename.includes("jsxRender.js") ||
+//   filename.includes("server.js") ||
+//   filename.includes(".babelrc") ||
+//   filename.includes("gitignore.txt");
 
 const makeFiles = async (options) => {
-  const filesList = (await getFiles(path.resolve(__dirname, '../resources')))
-    .filter((filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]));
+  const filesList = (await getFiles(path.resolve(__dirname, '../resources'))).filter(
+    (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
+  );
   for (let i = 0; i < filesList.length; i += 1) {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -56,6 +82,8 @@ const makeFiles = async (options) => {
     }
   }
   await fs.rename('gitignore.txt', '.gitignore');
+  if (options.includes('eslint')) await fs.rename('eslintrc.txt', '.eslintrc.js');
+  if (options.includes('prettier')) await fs.rename('prettierrc.txt', '.prettierrc');
 };
 
 const applyOptions = async (options) => {
@@ -74,40 +102,47 @@ const applyOptions = async (options) => {
     }
 
     if (!options.includes('json')) {
-      serverFile = serverFile
-        .replace('app.use(express.urlencoded({ extended: true }));\n'
-        + 'app.use(express.json());\n', '');
+      serverFile = serverFile.replace(
+        'app.use(express.urlencoded({ extended: true }));\n' + 'app.use(express.json());\n',
+        '',
+      );
     }
 
     if (!options.includes('webpack')) {
-      serverFile = serverFile
-        .replace("app.use(express.static('public'));\n", '');
+      serverFile = serverFile.replace("app.use(express.static('public'));\n", '');
     }
 
     if (!options.includes('routing')) {
-      serverFile = serverFile
-        .replace('\napp.use((req, res, next) => {\n'
-          + '  res.locals.path = req.originalUrl;\n'
-          + '  next();\n'
-          + '});\n', '');
+      serverFile = serverFile.replace(
+        '\napp.use((req, res, next) => {\n' +
+          '  res.locals.path = req.originalUrl;\n' +
+          '  next();\n' +
+          '});\n',
+        '',
+      );
     }
 
     if (!options.includes('session')) {
       serverFile = serverFile
-        .replace("import session from 'express-session';\n"
-        + "import store from 'session-file-store';\n", '')
+        .replace(
+          "import session from 'express-session';\n" + "import store from 'session-file-store';\n",
+          '',
+        )
         .replace('const FileStore = store(session);\n', '')
-        .replace('\nconst sessionConfig = {\n'
-          + "  name: 'user_sid',\n"
-          + "  secret: process.env.SESSION_SECRET ?? 'test',\n"
-          + '  resave: true,\n'
-          + '  store: new FileStore(),\n'
-          + '  saveUninitialized: false,\n'
-          + '  cookie: {\n'
-          + '    maxAge: 1000 * 60 * 60 * 12,\n'
-          + '    httpOnly: true,\n'
-          + '  },\n'
-          + '};\n', '')
+        .replace(
+          '\nconst sessionConfig = {\n' +
+            "  name: 'user_sid',\n" +
+            "  secret: process.env.SESSION_SECRET ?? 'test',\n" +
+            '  resave: true,\n' +
+            '  store: new FileStore(),\n' +
+            '  saveUninitialized: false,\n' +
+            '  cookie: {\n' +
+            '    maxAge: 1000 * 60 * 60 * 12,\n' +
+            '    httpOnly: true,\n' +
+            '  },\n' +
+            '};\n',
+          '',
+        )
         .replace('app.use(session(sessionConfig));\n', '');
     }
 
@@ -130,9 +165,9 @@ const applyOptions = async (options) => {
   if (!options.includes('routing')) {
     const newLayout = (await fs.readFile('src/components/Layout.jsx', 'utf-8'))
       .replace(
-        '          <StaticRouter location={initState.path}>\n'
-      + '            <App {...initState} />\n'
-      + '          </StaticRouter>',
+        '          <StaticRouter location={initState.path}>\n' +
+          '            <App {...initState} />\n' +
+          '          </StaticRouter>',
         '          <App {...initState} />',
       )
       .replace("import { StaticRouter } from 'react-router-dom/server';\n", '');
@@ -140,16 +175,18 @@ const applyOptions = async (options) => {
   }
 
   if (!options.includes('webpack')) {
-    const newLayout = (await fs.readFile('src/components/Layout.jsx', 'utf-8'))
-      .replace('        <script\n'
-      + '          type="text/javascript"\n'
-      + '          dangerouslySetInnerHTML={{\n'
-      // eslint-disable-next-line no-template-curly-in-string
-      + '            __html: `window.initState=${JSON.stringify(initState)}`,\n'
-      + '          }}\n'
-      + '        />\n'
-      + '        <script defer src="/app.js" />\n'
-      + '        <script defer src="/vendor.js" />\n', '');
+    const newLayout = (await fs.readFile('src/components/Layout.jsx', 'utf-8')).replace(
+      '        <script\n' +
+        '          type="text/javascript"\n' +
+        '          dangerouslySetInnerHTML={{\n' +
+        // eslint-disable-next-line no-template-curly-in-string
+        '            __html: `window.initState=${JSON.stringify(initState)}`,\n' +
+        '          }}\n' +
+        '        />\n' +
+        '        <script defer src="/app.js" />\n' +
+        '        <script defer src="/vendor.js" />\n',
+      '',
+    );
     await fs.writeFile('src/components/Layout.jsx', newLayout, 'utf-8');
   }
 
@@ -159,8 +196,10 @@ const applyOptions = async (options) => {
   //  APPLYING OPTIONS TO .babelrc
 
   if (!options.includes('webpack')) {
-    const newBabelrc = (await fs.readFile('.babelrc', 'utf-8'))
-      .replace(',\n    "plugins": ["@babel/plugin-proposal-class-properties"]', '');
+    const newBabelrc = (await fs.readFile('.babelrc', 'utf-8')).replace(
+      ',\n    "plugins": ["@babel/plugin-proposal-class-properties"]',
+      '',
+    );
     await fs.writeFile('.babelrc', newBabelrc, 'utf-8');
   }
 
@@ -171,13 +210,23 @@ const applyOptions = async (options) => {
   if (options.includes('webpack') && !options.includes('routing')) {
     const newHydration = (await fs.readFile('src/components/index.jsx', 'utf-8'))
       .replace(
-        '  <BrowserRouter>\n'
-      + '    <App {...window.initState} />\n'
-      + '  </BrowserRouter>',
+        '  <BrowserRouter>\n' + '    <App {...window.initState} />\n' + '  </BrowserRouter>',
         '  <App {...window.initState} />',
       )
       .replace("import { BrowserRouter } from 'react-router-dom';\n", '');
     await fs.writeFile('src/components/index.jsx', newHydration, 'utf-8');
+  }
+
+  // **********************************************************************
+  // **********************************************************************
+  // **********************************************************************
+  //  APPLYING OPTIONS TO eslintrc.js
+  if (!options.includes('prettier')) {
+    const newEslintrc = (await fs.readFile('.eslintrc.js', 'utf-8')).replace(
+      "\n    'prettier',",
+      '',
+    );
+    await fs.writeFile('.eslintrc.js', newEslintrc, 'utf-8');
   }
 };
 

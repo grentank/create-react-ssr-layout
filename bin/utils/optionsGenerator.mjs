@@ -1,19 +1,29 @@
 import inquirer from 'inquirer';
 
 function getMode() {
-  return inquirer.prompt([{
-    type: 'list',
-    name: 'mode',
-    message: 'What do you want to do?',
-    choices: [
-      { name: 'Minimum (basic server, no hydration)', value: 'min' },
-      { name: 'Maximum (everything included)', value: 'max' },
-      { name: 'Custom (pick desired options)', value: 'custom' },
-    ],
-  }]);
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'mode',
+      message: 'What do you want to do?',
+      choices: [
+        { name: 'Minimum (basic server, no hydration)', value: 'min' },
+        { name: 'Maximum (everything included)', value: 'max' },
+        { name: 'Custom (pick desired options)', value: 'custom' },
+      ],
+    },
+  ]);
 }
 
 const choices = [
+  {
+    name: 'ESLint configuration',
+    value: 'eslint',
+  },
+  {
+    name: 'Prettier (only viable with ESLint)',
+    value: 'prettier',
+  },
   {
     name: 'Webpack and Hydration',
     value: 'webpack',
@@ -53,22 +63,24 @@ const choices = [
 ];
 
 function getOptions() {
-  return inquirer
-    .prompt([
-      {
-        type: 'checkbox',
-        message: 'Select custom options',
-        name: 'options',
-        pageSize: 9,
-        choices,
-        validate(answer) {
-          if (answer.length < 1) {
-            return 'You must choose at least one option.';
-          }
-          return true;
-        },
+  return inquirer.prompt([
+    {
+      type: 'checkbox',
+      message: 'Select custom options',
+      name: 'options',
+      pageSize: 11,
+      choices,
+      validate(answer) {
+        if (answer.length < 1) {
+          return 'You must choose at least one option.';
+        }
+        if (answer.includes('prettier') && !answer.includes('eslint')) {
+          return 'Prettier requires ESLint';
+        }
+        return true;
       },
-    ]);
+    },
+  ]);
 }
 
 async function getChoices() {

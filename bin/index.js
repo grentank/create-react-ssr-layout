@@ -1,18 +1,25 @@
 #! /usr/bin/env node
 const { makeDirs, makeFiles, applyOptions } = require('./utils/filesGenerator');
-const { scriptsToPackageJson, checkPckg, instructions } = require('./utils/packageJsonModification');
+const {
+  scriptsToPackageJson,
+  checkPackageJson,
+  instructions,
+} = require('./utils/packageJsonModification');
 const asyncSpawn = require('./utils/promisified');
 
 (async function run() {
   try {
     console.log('Checking package.json...');
     try {
-      await checkPckg();
+      await checkPackageJson();
     } catch (error) {
       console.log(error);
       console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
-      console.log('Error reading package.json. Use npm init first.\nThen execute npx create-react-ssr-layout again');
-      return;
+      console.log('Error reading package.json. Initiating "npm init -y"');
+      await asyncSpawn('npm', ['init', '-y']).catch(() => {
+        console.log('Failed to initiate package.json. Try to do it manually or run: npm init -y');
+        process.exit(1);
+      });
     }
     const { default: getChoices } = await import('./utils/optionsGenerator.mjs');
     const options = await getChoices();
@@ -41,4 +48,4 @@ const asyncSpawn = require('./utils/promisified');
     console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
     console.log('Failed to execute.');
   }
-}());
+})();
