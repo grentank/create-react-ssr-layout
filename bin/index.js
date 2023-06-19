@@ -5,7 +5,7 @@ const {
   checkPackageJson,
   instructions,
 } = require('./utils/packageJsonModification');
-const { default: getProjectDirectory } = require('./utils/projectDirectory');
+const getProjectDirectory = require('./utils/projectDirectory');
 const asyncSpawn = require('./utils/promisified');
 
 (async function run() {
