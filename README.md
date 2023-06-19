@@ -14,6 +14,12 @@ Simply run this command in your terminal
 npx create-react-ssr-layout@latest
 ```
 
+to setup a project in the current directory or
+
+```
+npx create-react-ssr-layout@latest <projectname>
+```
+
 Answer questions via cli and pick a server build. You may use a predefined one or customize the build on your own. All required dependencies will be installed automatically.
 
 ## Quick start
@@ -21,7 +27,7 @@ Answer questions via cli and pick a server build. You may use a predefined one o
 Execute this package
 
 ```
-npx create-react-ssr-layout
+npx create-react-ssr-layout@latest .
 ```
 
 Answer some questions and wait until all files are created and all dependencies are installed. To launch the server use
