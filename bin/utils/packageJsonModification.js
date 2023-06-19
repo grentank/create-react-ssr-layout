@@ -24,8 +24,6 @@ const devDependenciesMap = {
   session: '',
   axios: '',
   bcrypt: '',
-  eslint:
-    'eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks',
   prettier: 'prettier eslint-config-prettier',
 };
 
@@ -39,6 +37,12 @@ const scriptsToPackageJson = async (options) => {
     '@babel/node',
     '@babel/preset-react',
     '@babel/preset-env',
+    'eslint',
+    'eslint-config-airbnb',
+    'eslint-plugin-import',
+    'eslint-plugin-jsx-a11y',
+    'eslint-plugin-react',
+    'eslint-plugin-react-hooks',
   ];
   const dependencies = ['npm', 'i', 'express', 'react', 'react-dom'];
   jsonData.scripts.dev = 'babel-node src/server.js';
