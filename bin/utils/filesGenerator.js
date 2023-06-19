@@ -68,6 +68,7 @@ const isRequired = (filename) =>
 //   filename.includes("gitignore.txt");
 
 const makeFiles = async (options) => {
+  console.log('File creating with given options:', options);
   const filesList = (await getFiles(path.resolve(__dirname, '../resources'))).filter(
     (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
   );
