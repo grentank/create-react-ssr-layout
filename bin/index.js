@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+const fs = require('fs').promises;
 const { makeDirs, makeFiles, applyOptions } = require('./utils/filesGenerator');
 const {
   scriptsToPackageJson,
@@ -11,8 +12,8 @@ const asyncSpawn = require('./utils/promisified');
 (async function run() {
   try {
     const projDir = getProjectDirectory();
-    if (projDir !== '.') await asyncSpawn('mkdir', [projDir]);
-    await asyncSpawn('cd', [projDir]);
+    if (projDir !== '.') await fs.mkdir(projDir); // await asyncSpawn('mkdir', [projDir]);
+    // await asyncSpawn('cd', [projDir]);
     console.log('Checking package.json...');
     try {
       await checkPackageJson();
