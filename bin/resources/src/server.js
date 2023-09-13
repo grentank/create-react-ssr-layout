@@ -6,6 +6,7 @@ import path from 'path';
 import jsxRender from './utils/jsxRender';
 import indexRouter from './routes/indexRouter';
 import apiRouter from './routes/apiRouter';
+import resLocals from './middlewares/resLocals';
 
 require('dotenv').config();
 
@@ -34,11 +35,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(sessionConfig));
-
-app.use((req, res, next) => {
-  res.locals.path = req.originalUrl;
-  next();
-});
+app.use(resLocals);
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

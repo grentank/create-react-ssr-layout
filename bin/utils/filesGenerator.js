@@ -56,21 +56,16 @@ const requiredFiles = [
 const isRequired = (filename) =>
   requiredFiles.some((requiredFile) => filename.includes(requiredFile));
 
-// rewrite this garbage =)
-// const isRequired = (filename) =>
-//   filename.includes("App.jsx") ||
-//   filename.includes("Layout.jsx") ||
-//   filename.includes("indexRouter.js") ||
-//   filename.includes("apiRouter.js") ||
-//   filename.includes("jsxRender.js") ||
-//   filename.includes("server.js") ||
-//   filename.includes(".babelrc") ||
-//   filename.includes("gitignore.txt");
-
 const makeFiles = async (options) => {
   const filesList = (await getFiles(path.resolve(__dirname, '../resources'))).filter(
     (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
   );
+
+  if (!options.includes('routing') && !options.includes('session')) {
+    const indexOfResLocals = filesList.indexOf('src/middlewares/resLocals.js');
+    if (indexOfResLocals >= 0) filesList.splice(indexOfResLocals, 1);
+  }
+
   for (let i = 0; i < filesList.length; i += 1) {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -120,6 +115,10 @@ const applyOptions = async (options) => {
           '});\n',
         '',
       );
+    }
+
+    if (!options.includes('routing') && !options.includes('session')) {
+      serverFile = serverFile.replace('app.use(resLocals);\n', '');
     }
 
     if (!options.includes('session')) {
@@ -193,19 +192,6 @@ const applyOptions = async (options) => {
   // **********************************************************************
   // **********************************************************************
   // **********************************************************************
-  //  APPLYING OPTIONS TO .babelrc
-
-  if (!options.includes('webpack')) {
-    const newBabelrc = (await fs.readFile('.babelrc', 'utf-8')).replace(
-      ',\n    "plugins": ["@babel/plugin-proposal-class-properties"]',
-      '',
-    );
-    await fs.writeFile('.babelrc', newBabelrc, 'utf-8');
-  }
-
-  // **********************************************************************
-  // **********************************************************************
-  // **********************************************************************
   //  APPLYING OPTIONS TO index.jsx
   if (options.includes('webpack') && !options.includes('routing')) {
     const newHydration = (await fs.readFile('src/components/index.jsx', 'utf-8'))
@@ -227,6 +213,26 @@ const applyOptions = async (options) => {
       '',
     );
     await fs.writeFile('.eslintrc.js', newEslintrc, 'utf-8');
+  }
+
+  // **********************************************************************
+  // **********************************************************************
+  // **********************************************************************
+  //  APPLYING OPTIONS TO resLocals.js
+  if (!options.includes('routing') && options.includes('session')) {
+    const newResLocalsMWT = (await fs.readFile('src/middlewares/resLocals.js', 'utf-8')).replace(
+      '\n  res.locals.path = req.originalUrl;',
+      '',
+    );
+    await fs.writeFile('src/middlewares/resLocals.js', newResLocalsMWT, 'utf-8');
+  }
+
+  if (options.includes('routing') && !options.includes('session')) {
+    const newResLocalsMWT = (await fs.readFile('src/middlewares/resLocals.js', 'utf-8')).replace(
+      '\n  res.locals.user = req.session?.user;',
+      '',
+    );
+    await fs.writeFile('src/middlewares/resLocals.js', newResLocalsMWT, 'utf-8');
   }
 };
 
