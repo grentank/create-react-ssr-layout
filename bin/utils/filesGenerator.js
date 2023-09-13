@@ -22,7 +22,7 @@ const getFiles = async (dir) => {
 };
 
 const makeDirs = async () => {
-  const dirs = ['src/components', 'src/routes', 'src/utils'];
+  const dirs = ['src/components', 'src/routes', 'src/utils', 'src/middlewares'];
   try {
     await fs.mkdir('src');
     console.log(`+++ Created directory src`);
