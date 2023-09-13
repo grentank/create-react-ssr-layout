@@ -1,20 +1,25 @@
 #! /usr/bin/env node
+const fs = require('fs').promises;
 const { makeDirs, makeFiles, applyOptions } = require('./utils/filesGenerator');
 const {
   scriptsToPackageJson,
   checkPackageJson,
   instructions,
 } = require('./utils/packageJsonModification');
+const getProjectDirectory = require('./utils/projectDirectory');
 const asyncSpawn = require('./utils/promisified');
 
 (async function run() {
   try {
+    const projDir = getProjectDirectory();
+    if (projDir !== '.') await fs.mkdir(projDir); // await asyncSpawn('mkdir', [projDir]);
+    // await asyncSpawn('cd', [projDir]);
     console.log('Checking package.json...');
     try {
       await checkPackageJson();
     } catch (error) {
-      console.log(error);
-      console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
+      // console.log(error);
+      // console.log(`\n${'#'.repeat(50)}\n${'#'.repeat(50)}`);
       console.log('Error reading package.json. Initiating "npm init -y"');
       await asyncSpawn('npm', ['init', '-y']).catch(() => {
         console.log('Failed to initiate package.json. Try to do it manually or run: npm init -y');

@@ -17,11 +17,7 @@ function getMode() {
 
 const choices = [
   {
-    name: 'ESLint configuration',
-    value: 'eslint',
-  },
-  {
-    name: 'Prettier (only viable with ESLint)',
+    name: 'Prettier',
     value: 'prettier',
   },
   {
@@ -73,9 +69,6 @@ function getOptions() {
       validate(answer) {
         if (answer.length < 1) {
           return 'You must choose at least one option.';
-        }
-        if (answer.includes('prettier') && !answer.includes('eslint')) {
-          return 'Prettier requires ESLint';
         }
         return true;
       },

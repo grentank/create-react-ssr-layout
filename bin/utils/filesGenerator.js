@@ -38,7 +38,6 @@ const filesToOptionsMap = {
   '.sequelizerc': 'sequelize',
   '.env': 'dotenv',
   'src/components/index.jsx': 'webpack',
-  'eslintrc.txt': 'eslint',
   'prettierrc.txt': 'prettier',
 };
 
@@ -50,6 +49,7 @@ const requiredFiles = [
   'jsxRender.js',
   'server.js',
   '.babelrc',
+  'eslintrc.txt',
   'gitignore.txt',
 ];
 
@@ -77,7 +77,7 @@ const makeFiles = async (options) => {
     }
   }
   await fs.rename('gitignore.txt', '.gitignore');
-  if (options.includes('eslint')) await fs.rename('eslintrc.txt', '.eslintrc.js');
+  await fs.rename('eslintrc.txt', '.eslintrc.js');
   if (options.includes('prettier')) await fs.rename('prettierrc.txt', '.prettierrc');
 };
 

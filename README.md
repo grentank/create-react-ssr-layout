@@ -2,16 +2,22 @@
 
 A useful npx tool to quickly build a basic express server that uses a custom-built SSR engine.
 
-[Check out this package on npm](https://www.npmjs.com/package/create-react-ssr-layout "NPM create-react-ssr-layout")
+[Check out this package on npm](https://www.npmjs.com/package/create-react-ssr-layout 'NPM create-react-ssr-layout')
 
-[And on GitHub](https://github.com/grentank/create-react-ssr-layout "GitHub")
+[And on GitHub](https://github.com/grentank/create-react-ssr-layout 'GitHub')
 
 ## Usage
 
 Simply run this command in your terminal
 
 ```
-npx create-react-ssr-layout
+npx create-react-ssr-layout@latest
+```
+
+to setup a project in the current directory or
+
+```
+npx create-react-ssr-layout@latest <projectname>
 ```
 
 Answer questions via cli and pick a server build. You may use a predefined one or customize the build on your own. All required dependencies will be installed automatically.
@@ -21,7 +27,7 @@ Answer questions via cli and pick a server build. You may use a predefined one o
 Execute this package
 
 ```
-npx create-react-ssr-layout
+npx create-react-ssr-layout@latest .
 ```
 
 Answer some questions and wait until all files are created and all dependencies are installed. To launch the server use
@@ -44,7 +50,6 @@ Installs all chosen dependencies at once. Picking "Maximum server" option will i
 
 - dependencies: express, react, react-dom, react-router-dom, sequelize, pg, pg-hstore, dotenv, express-session, session-file-store, bcrypt, axios
 - devDependencies: @babel/node, @babel/plugin-proposal-class-properties, @babel/preset-react, @babel/preset-env, babel-loader, morgan, webpack, webpack-cli, sequelize-cli
-
 
 The option "Minimum server" will install the following
 
@@ -71,7 +76,9 @@ Starts webpack in watch mode.
 .
 ├── .babelrc
 ├── .env
+├── .eslintrc.js
 ├── .gitignore
+├── .prettierrc
 ├── .sequelizerc
 ├── webpack.config.js
 └── src
@@ -90,31 +97,31 @@ Starts webpack in watch mode.
 ## Used packages
 
 - React-based
-    - react
-    - react-dom
-    - react-router-dom
+  - react
+  - react-dom
+  - react-router-dom
 - Server-based
-    - express
-    - express-session
-    - session-file-store
-    - dotenv
-    - morgan
-    - bcrypt
-    - axios
+  - express
+  - express-session
+  - session-file-store
+  - dotenv
+  - morgan
+  - bcrypt
+  - axios
 - Sequelize
-    - sequelize
-    - sequelize-cli
-    - pg
-    - pg-hstore
+  - sequelize
+  - sequelize-cli
+  - pg
+  - pg-hstore
 - Babel
-    - @babel/node
-    - @babel/plugin-proposal-class-properties
-    - @babel/preset-react
-    - @babel/preset-env
+  - @babel/node
+  - @babel/plugin-proposal-class-properties
+  - @babel/preset-react
+  - @babel/preset-env
 - Webpack
-    - webpack
-    - webpack-cli
-    - babel-loader
+  - webpack
+  - webpack-cli
+  - babel-loader
 
 ## SSR
 
