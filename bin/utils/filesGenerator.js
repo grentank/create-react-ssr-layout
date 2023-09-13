@@ -61,9 +61,8 @@ const makeFiles = async (options) => {
     (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
   );
 
-  if (!options.includes('routing') && !options.includes('session')) {
-    const indexOfResLocals = filesList.indexOf('src/middlewares/resLocals.js');
-    if (indexOfResLocals >= 0) filesList.splice(indexOfResLocals, 1);
+  if (options.includes('routing') || options.includes('session')) {
+    filesList.push('src/middlewares/resLocals.js');
   }
 
   for (let i = 0; i < filesList.length; i += 1) {
