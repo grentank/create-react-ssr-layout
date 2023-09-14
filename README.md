@@ -74,24 +74,27 @@ Starts webpack in watch mode.
 
 ```bash
 .
+├── package.json
 ├── .babelrc
 ├── .env
 ├── .eslintrc.js
 ├── .gitignore
 ├── .prettierrc
 ├── .sequelizerc
-├── webpack.config.js
-└── src
-    ├── components
-    │   ├── App.jsx
-    │   ├── index.jsx
-    │   └── Layout.jsx
-    ├── routes
-    │   ├── apiRouter.js
-    │   └── indexRouter.js
-    ├── server.js
-    └── utils
-        └── jsxRender.js
+├── src
+│   ├── components
+│   │   ├── App.jsx
+│   │   ├── index.jsx
+│   │   └── Layout.jsx
+│   ├── middlewares
+│   │   └── resLocals.js
+│   ├── routes
+│   │   ├── apiRouter.js
+│   │   └── indexRouter.js
+│   ├── server.js
+│   └── utils
+│       └── jsxRender.js
+└── webpack.config.js
 ```
 
 ## Used packages
