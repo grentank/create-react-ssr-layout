@@ -4,7 +4,7 @@ const path = require('path');
 const createFile = async (filename) =>
   fs.writeFile(
     filename,
-    await fs.readFile(path.resolve(__dirname, `../resources/${filename}`), 'utf8'),
+    await fs.readFile(path.resolve(__dirname, 'resources', filename), 'utf8'),
     'utf8',
   );
 
@@ -18,7 +18,7 @@ const getFiles = async (dir) => {
   );
   return files
     .flat()
-    .map((pathname) => pathname.replace(`${path.resolve(__dirname, '../resources')}/`, ''));
+    .map((pathname) => pathname.replace(path.resolve(__dirname, '..', 'resources'), '').slice(0, -1));
 };
 
 const makeDirs = async () => {
