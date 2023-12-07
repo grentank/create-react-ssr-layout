@@ -1,13 +1,22 @@
-import React from 'react';
+/* eslint-disable no-param-reassign */
+/* eslint-disable react/jsx-filename-extension */
 import { renderToString } from 'react-dom/server';
+import React from 'react';
 import Layout from '../components/Layout';
+import App from '../components/App';
 
-export default function jsxRender(_, initState, cb) {
+export default async function jsxRender(pathToFile, initState, cb) {
   try {
-    const layout = React.createElement(Layout, { initState });
+    const { default: Component } = await import(pathToFile);
+    initState.componentName = Component.name;
+    const layout = (
+      <Layout initState={initState}>
+        <App {...initState}><Component {...initState} /></App>
+      </Layout>
+    );
     const html = renderToString(layout);
-    return cb(null, `<!DOCTYPE html>${html}`);
+    cb(null, `<!DOCTYPE html>${html}`);
   } catch (error) {
-    return cb(error);
+    cb(error);
   }
 }

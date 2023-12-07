@@ -22,12 +22,13 @@ const getFiles = async (dir) => {
 };
 
 const makeDirs = async () => {
-  const dirs = ['src/components', 'src/routes', 'src/utils', 'src/middlewares'];
+  const dirs = ['src/components', 'src/routes', 'src/utils', 'src/middlewares', 'src/config'];
   try {
     await fs.mkdir('src');
     console.log(`+++ Created directory src`);
     await Promise.all(dirs.map((dir) => fs.mkdir(dir)));
-    console.log(`+++ Created directories ${dirs.join(', ')}`);
+    await fs.mkdir('src/components/pages');
+    console.log(`+++ Created directories ${[...dirs, 'src/components/pages'].join(', ')}`);
   } catch (e) {
     console.log(`--- Failed to create directories ${dirs.join(', ')}`);
   }
@@ -57,13 +58,13 @@ const isRequired = (filename) =>
   requiredFiles.some((requiredFile) => filename.includes(requiredFile));
 
 const makeFiles = async (options) => {
-  const filesList = (await getFiles(path.resolve(__dirname, '../resources'))).filter(
+  const filesList = await getFiles(path.resolve(__dirname, '../resources')); /* .filter(
     (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
-  );
+  ); */
 
-  if (options.includes('routing') || options.includes('session')) {
-    filesList.push('src/middlewares/resLocals.js');
-  }
+  // if (options.includes('routing') || options.includes('session')) {
+  //   filesList.push('src/middlewares/resLocals.js');
+  // }
 
   for (let i = 0; i < filesList.length; i += 1) {
     try {
@@ -77,7 +78,7 @@ const makeFiles = async (options) => {
   }
   await fs.rename('gitignore.txt', '.gitignore');
   await fs.rename('eslintrc.txt', '.eslintrc.js');
-  if (options.includes('prettier')) await fs.rename('prettierrc.txt', '.prettierrc');
+  await fs.rename('prettierrc.txt', '.prettierrc');
 };
 
 const applyOptions = async (options) => {

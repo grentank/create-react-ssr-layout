@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import components from './components';
+
+const Component = components[window.initState.componentName];
 
 ReactDOMClient.hydrateRoot(
   document.getElementById('root'),
-  <BrowserRouter>
-    <App {...window.initState} />
-  </BrowserRouter>,
+  <App {...window.initState}>
+    <Component {...window.initState} />
+  </App>,
 );
 
 delete window.initState;
