@@ -58,7 +58,7 @@ const isRequired = (filename) =>
   requiredFiles.some((requiredFile) => filename.includes(requiredFile));
 
 const makeFiles = async (options) => {
-  const filesList = await getFiles(path.resolve(__dirname, '../resources')); /* .filter(
+  const filesList = await getFiles(path.resolve(__dirname, '..', 'resources')); /* .filter(
     (filename) => isRequired(filename) || options.includes(filesToOptionsMap[filename]),
   ); */
 
